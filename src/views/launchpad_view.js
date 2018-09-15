@@ -1,39 +1,62 @@
-const LaunchpadView = function(launchpad, container){
+const PubSub = require('../helpers/pub_sub.js');
+
+const LaunchpadView = function(container){
+  // .grid-container
   this.container = container;
-  this.launchpad = launchpad;
 };
 
 LaunchpadView.prototype.render = function(){
 
-  var el = document.createElement('div');
-  el.className = 'marker';
+  PubSub.subscribe('LaunchPads:selected-launchpad-ready', (event) => {
 
-  const launchpadCoordinates = [];
-  launchpadCoordinates.push(this.launchpad.location.longitude);
-  launchpadCoordinates.push(this.launchpad.location.latitude);
+    const selection = event.detail;
+    this.launchpad = selection;
 
-  new mapboxgl.Marker(el)
-  .setLngLat(launchpadCoordinates)
-  .addTo(map);
+    const detailsContainer = document.querySelector('.content-right-inner');
+    detailsContainer.innerHTML = '';
+
+    const heading = document.createElement('h2');
+    heading.textContent = this.launchpad.full_name;
+    detailsContainer.appendChild(heading);
+
+    const location = document.createElement('h3');
+    location.textContent = `Located in ${this.launchpad.location.name}, ${this.launchpad.location.region}`
+    detailsContainer.appendChild(location);
+
+    const subheading = document.createElement('h3');
+    subheading.textContent = `Status: ${this.launchpad.status}`;
+    detailsContainer.appendChild(subheading);
+
+    const description = document.createElement('p');
+    description.textContent = `${this.launchpad.details}`
+    detailsContainer.appendChild(description);
+
+    const rocketsLaunchedHeading = document.createElement('h3');
+    rocketsLaunchedHeading.textContent = `Rockets launched from this site:`;
+    detailsContainer.appendChild(rocketsLaunchedHeading);
+
+    this.getRockets(detailsContainer);
+
+  });
+
+  LaunchpadView.prototype.getRockets = function (container) {
+    this.launchpad.vehicles_launched.forEach((rocket) => {
+      const rocketButton = document.createElement('button');
+      rocketButton.innerHTML = `<i class="fas fa-rocket"></i><br> ${rocket}`;
+      container.appendChild(rocketButton);
+    });
+  };
+  // var el = document.createElement('div');
+  // el.className = 'marker';
+
+  // const launchpadCoordinates = [];
+  // launchpadCoordinates.push(this.launchpad.location.longitude);
+  // launchpadCoordinates.push(this.launchpad.location.latitude);
+
+  // new mapboxgl.Marker(el)
+  // .setLngLat(launchpadCoordinates)
+  // .addTo(map);
   
-  const launchpadContainer = document.createElement('div');
-
-  const header = document.createElement('h2');
-  header.textContent = this.launchpad.full_name;
-  launchpadContainer.appendChild(header);
-
-  const details = document.createElement('ul');
-  launchpadContainer.appendChild(details);
-
-  const latitude = document.createElement('li');
-  latitude.textContent = this.launchpad.location.latitude;
-  details.appendChild(latitude);
-
-  const longitude = document.createElement('li');
-  longitude.textContent = this.launchpad.location.longitude;
-  details.appendChild(longitude);
-
-  this.container.appendChild(launchpadContainer);
 };
 
 module.exports = LaunchpadView;

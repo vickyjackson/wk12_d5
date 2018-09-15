@@ -7,24 +7,45 @@
   <title>SpaceX Launches</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" media="screen" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css?family=Hind+Madurai:400,500,600,700" rel="stylesheet">
   <script src="js/bundle.js"></script>
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
 </head>
 
 <body>
-  <header class="title-bar">
-    <h1 class="page-title">SpaceX rocket launches</h1>
-  </header>
+  <div class="grid-container">
+    <div class="header">
+      <h1>SpaceX Launch Sites</h1>
+    </div>
 
-  <div id='map' style='width: 800px; height: 600px;'></div>
-  <script>
-  mapboxgl.accessToken = 'pk.eyJ1Ijoidmlja3lqYWNrc29uIiwiYSI6ImNqbTNsMGlmdTBzaHkzcG8yMm1lbnQ1cW8ifQ.qWZv8bd3kkdHyyXnkKHEDg';
-  var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/light-v9'
-  });
-  </script>
+    <div class="content-left">
+
+      <div id="map">
+      </div>
+      <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoidmlja3lqYWNrc29uIiwiYSI6ImNqbTNsMGlmdTBzaHkzcG8yMm1lbnQ1cW8ifQ.qWZv8bd3kkdHyyXnkKHEDg';
+        var map = new mapboxgl.Map({
+          container: 'map',
+          style: 'mapbox://styles/mapbox/light-v9'
+        });
+      </script>
+    </div>
+
+
+    <div class="content-right">
+      <select id="dropdown"></select>
+      <div class="content-right-inner">
+
+      </div>
+    </div>
+
+
+
+
+
+  </div>
 </body>
 
 </html>

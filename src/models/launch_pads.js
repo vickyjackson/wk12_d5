@@ -5,6 +5,13 @@ const LaunchPads = function(){
 
 };
 
+LaunchPads.prototype.bindEvents = function(){
+  PubSub.subscribe('SelectLaunchpadView:change', (event) => {
+    const selectedIndex = event.detail;
+    this.publishLaunchpadDetail(selectedIndex);
+  });
+};
+
 LaunchPads.prototype.getData = function () {
   const url = `https://api.spacexdata.com/v2/launchpads/`;
   const request = new RequestHelper(url);
@@ -17,7 +24,14 @@ LaunchPads.prototype.getData = function () {
     .catch((err) => {
       console.log(err);
     })
+    
 }
+
+LaunchPads.prototype.publishLaunchpadDetail = function(launchpadIndex){
+  const selectedLaunchpad = this.data[launchpadIndex];
+  PubSub.publish('LaunchPads:selected-launchpad-ready', selectedLaunchpad)
+};
+
 
 module.exports = LaunchPads;
 
