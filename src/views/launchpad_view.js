@@ -16,6 +16,14 @@ LaunchpadView.prototype.render = function(){
     const detailsContainer = document.querySelector('.content-right-inner');
     detailsContainer.innerHTML = '';
 
+    if(!this.launchpad){
+      map.flyTo({
+        zoom: 0
+      });
+      this.removeMapMarker();
+      return;
+    };
+
     const heading = document.createElement('h2');
     heading.textContent = this.launchpad.full_name;
     detailsContainer.appendChild(heading);
@@ -37,6 +45,7 @@ LaunchpadView.prototype.render = function(){
     detailsContainer.appendChild(rocketsLaunchedHeading);
 
     this.getRockets(detailsContainer);
+
     this.drawMapMarker();
 
   });
@@ -54,10 +63,7 @@ LaunchpadView.prototype.drawMapMarker = function(){
   var el = document.createElement('div');
   el.className = 'marker';
 
-  if (this.marker !== null){
-    this.marker.remove();
-    console.log('removing map marker');
-  }
+  this.removeMapMarker();
 
   const launchpadCoordinates = [];
   launchpadCoordinates.push(this.launchpad.location.longitude);
@@ -68,6 +74,20 @@ LaunchpadView.prototype.drawMapMarker = function(){
   .addTo(map);
   console.log('adding map marker');
 
+  map.flyTo({
+    zoom: 15,
+    center: [
+      this.launchpad.location.longitude,
+      this.launchpad.location.latitude],
+  });
+
+};
+
+LaunchpadView.prototype.removeMapMarker = function(){
+  if (this.marker !== null){
+    this.marker.remove();
+    console.log('removing map marker');
+  }
 };
 
 module.exports = LaunchpadView;
