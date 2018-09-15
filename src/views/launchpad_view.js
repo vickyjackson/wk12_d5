@@ -2,6 +2,7 @@ const PubSub = require('../helpers/pub_sub.js');
 
 const LaunchpadView = function(container){
   // .grid-container
+  this.marker = null;
   this.container = container;
 };
 
@@ -31,32 +32,42 @@ LaunchpadView.prototype.render = function(){
     description.textContent = `${this.launchpad.details}`
     detailsContainer.appendChild(description);
 
-    const rocketsLaunchedHeading = document.createElement('h3');
-    rocketsLaunchedHeading.textContent = `Rockets launched from this site:`;
+    const rocketsLaunchedHeading = document.createElement('p');
+    rocketsLaunchedHeading.textContent = `Vehicles launched from this site:`;
     detailsContainer.appendChild(rocketsLaunchedHeading);
 
     this.getRockets(detailsContainer);
+    this.drawMapMarker();
 
   });
+};
 
-  LaunchpadView.prototype.getRockets = function (container) {
-    this.launchpad.vehicles_launched.forEach((rocket) => {
-      const rocketButton = document.createElement('button');
-      rocketButton.innerHTML = `<i class="fas fa-rocket"></i><br> ${rocket}`;
-      container.appendChild(rocketButton);
-    });
-  };
-  // var el = document.createElement('div');
-  // el.className = 'marker';
+LaunchpadView.prototype.getRockets = function (container) {
+  this.launchpad.vehicles_launched.forEach((rocket) => {
+    const rocketButton = document.createElement('button');
+    rocketButton.innerHTML = `<i class="fas fa-rocket"></i><br> ${rocket}`;
+    container.appendChild(rocketButton);
+  });
+};
 
-  // const launchpadCoordinates = [];
-  // launchpadCoordinates.push(this.launchpad.location.longitude);
-  // launchpadCoordinates.push(this.launchpad.location.latitude);
+LaunchpadView.prototype.drawMapMarker = function(){
+  var el = document.createElement('div');
+  el.className = 'marker';
 
-  // new mapboxgl.Marker(el)
-  // .setLngLat(launchpadCoordinates)
-  // .addTo(map);
-  
+  if (this.marker !== null){
+    this.marker.remove();
+    console.log('removing map marker');
+  }
+
+  const launchpadCoordinates = [];
+  launchpadCoordinates.push(this.launchpad.location.longitude);
+  launchpadCoordinates.push(this.launchpad.location.latitude);
+
+  this.marker = new mapboxgl.Marker(el)
+  .setLngLat(launchpadCoordinates)
+  .addTo(map);
+  console.log('adding map marker');
+
 };
 
 module.exports = LaunchpadView;
