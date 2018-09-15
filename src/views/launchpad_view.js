@@ -34,6 +34,7 @@ LaunchpadView.prototype.render = function(){
 
     const subheading = document.createElement('h3');
     subheading.textContent = `Status: ${this.launchpad.status}`;
+    subheading.classList.add(this.launchpad.status.replace(/\s/g, '-'));
     detailsContainer.appendChild(subheading);
 
     const description = document.createElement('p');
@@ -75,7 +76,7 @@ LaunchpadView.prototype.drawMapMarker = function(){
   console.log('adding map marker');
 
   map.flyTo({
-    zoom: 15,
+    zoom: 12,
     center: [
       this.launchpad.location.longitude,
       this.launchpad.location.latitude],
