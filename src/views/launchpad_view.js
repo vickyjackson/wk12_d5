@@ -1,9 +1,11 @@
 const PubSub = require('../helpers/pub_sub.js');
+const Launches = require('../models/launches.js');
 
 const LaunchpadView = function(container){
   // .grid-container
   this.marker = null;
   this.container = container;
+  this.detailsContainer = document.querySelector('.content-right-inner');
 };
 
 LaunchpadView.prototype.render = function(){
@@ -13,8 +15,7 @@ LaunchpadView.prototype.render = function(){
     const selection = event.detail;
     this.launchpad = selection;
 
-    const detailsContainer = document.querySelector('.content-right-inner');
-    detailsContainer.innerHTML = '';
+    this.detailsContainer.innerHTML = '';
 
     if(!this.launchpad){
       map.flyTo({
@@ -26,38 +27,56 @@ LaunchpadView.prototype.render = function(){
 
     const heading = document.createElement('h2');
     heading.textContent = this.launchpad.full_name;
-    detailsContainer.appendChild(heading);
+    this.detailsContainer.appendChild(heading);
 
     const location = document.createElement('h3');
     location.textContent = `Located in ${this.launchpad.location.name}, ${this.launchpad.location.region}`
-    detailsContainer.appendChild(location);
+    this.detailsContainer.appendChild(location);
 
     const subheading = document.createElement('h3');
     subheading.textContent = `Status: ${this.launchpad.status}`;
     subheading.classList.add(this.launchpad.status.replace(/\s/g, '-'));
-    detailsContainer.appendChild(subheading);
+    this.detailsContainer.appendChild(subheading);
 
     const description = document.createElement('p');
     description.textContent = `${this.launchpad.details}`
-    detailsContainer.appendChild(description);
-
-    const rocketsLaunchedHeading = document.createElement('p');
-    rocketsLaunchedHeading.textContent = `Vehicles launched from this site:`;
-    detailsContainer.appendChild(rocketsLaunchedHeading);
-
-    this.getRockets(detailsContainer);
+    this.detailsContainer.appendChild(description);
 
     this.drawMapMarker();
 
   });
+  this.getLaunchesById(this.detailsContainer);
 };
 
-LaunchpadView.prototype.getRockets = function (container) {
-  this.launchpad.vehicles_launched.forEach((rocket) => {
-    const rocketButton = document.createElement('button');
-    rocketButton.innerHTML = `<i class="fas fa-rocket"></i><br> ${rocket}`;
-    container.appendChild(rocketButton);
+LaunchpadView.prototype.getLaunchesById = function (container) {
+  
+  // we only want to register this once and get it added to a container
+
+  console.log("launchpadview - subscribing to launches by id ready");
+  PubSub.subscribe('Launches:launches-by-id-ready', (event) => {
+    
+    console.log('recieived launched-by-id');
+    
+    this.launchesById = event.detail;
+
+    const rocketsLaunchedHeading = document.createElement('h4');
+    if (this.launchesById.length === 0){
+      rocketsLaunchedHeading.textContent = `There is no mission data for this launch site.`;
+      this.detailsContainer.appendChild(rocketsLaunchedHeading);
+    } else {
+      rocketsLaunchedHeading.textContent = `Missions from this site:`;
+      this.detailsContainer.appendChild(rocketsLaunchedHeading);
+    };
+
+    this.launchesById.forEach((launch) => {
+      const launchButton = document.createElement('button');
+      launchButton.innerHTML = `<i class="fas fa-rocket"></i><br> ${launch.mission_name}`;
+      container.appendChild(launchButton);
+    });
+
+
   });
+  
 };
 
 LaunchpadView.prototype.drawMapMarker = function(){

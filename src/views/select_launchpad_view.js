@@ -22,7 +22,7 @@ SelectLaunchpadView.prototype.populate = function (launchpadsData) {
   this.element.appendChild(defaultOption);
   launchpadsData.forEach((launchpad, index) => {
     const option = document.createElement('option');
-    console.log(launchpad);
+    //console.log(launchpad);
     option.textContent = launchpad.full_name;
     option.value = index;
     this.element.appendChild(option);

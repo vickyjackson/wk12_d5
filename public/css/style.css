@@ -33,7 +33,7 @@ body {
 
 .header { 
   grid-area: header; 
-  background-color: #000;
+  background-color: #232929;
   color: #FFF;
   padding-top: 0rem;
   text-align: center;
@@ -58,11 +58,11 @@ body {
   height: 35rem;
 }
 
-.footer { 
+/* .footer { 
   grid-area: footer; 
   background-color: #000;
   height: 6rem;
-}
+} */
 
 #dropdown {
   height: 2rem;
@@ -82,9 +82,12 @@ body {
 
 button {
   margin-right: 1rem;
+  margin-bottom: 1rem;
   font-size: 1rem;
   width: 8rem;
   height: 8rem;
+  background-color: #cbd2d3;
+  border: none;
 }
 
 button i{
