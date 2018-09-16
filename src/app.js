@@ -7,7 +7,12 @@ const LaunchpadView = require('./views/launchpad_view.js');
 document.addEventListener('DOMContentLoaded', () => {
 
   const dropdown = document.querySelector('#dropdown');
-
+  const close = document.querySelector('.close');
+  const overlay = document.querySelector('.overlay');
+  const popup = document.querySelector('.popup');
+  popup.style = 'display: none';
+  overlay.style = 'display: none';
+  close.addEventListener('click', handleClickClose);
 
   const launches = new Launches();
   launches.getData();
@@ -26,4 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('.grid-container');
   const launchpadView = new LaunchpadView(container);
   launchpadView.render();
+
 });
+
+const handleClickClose = function(){
+  const overlay = document.querySelector('.overlay');
+  const popup = document.querySelector('.popup');
+  popup.style = 'display: none';
+  overlay.style = 'display: none';
+}
