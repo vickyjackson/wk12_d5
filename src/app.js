@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
 const handleClickClose = function(){
   const overlay = document.querySelector('.overlay');
   const popup = document.querySelector('.popup');
+  const popupContent = document.querySelector('.popup-content');
+  popupContent.innerHTML = '';
   popup.style = 'display: none';
   overlay.style = 'display: none';
 }
